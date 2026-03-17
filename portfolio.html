@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Debanga Guria — AI/ML Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ease:cubic-bezier(.25,.46,.45,.94);--spring:cubic-bezier(.34,1.56,.64,1);--r:16px;--r2:24px;}
+[data-theme="dark"]{
+  --bg:#060609;--bg2:#0e0e15;--bg3:#14141e;
+  --sf:rgba(255,255,255,.035);--sf2:rgba(255,255,255,.065);--sf3:rgba(255,255,255,.10);
+  --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.14);
+  --tx:#f2f0fa;--tx2:#c6c4d8;--mu:#7e7c92;--mu2:#54526a;
+  --gold:#e9c96e;--gold2:#f5dfa0;--g3:rgba(233,201,110,.12);
+  --teal:#4fd1c5;--rose:#fb7185;--vio:#a78bfa;--grn:#4ade80;
+  --glow:rgba(233,201,110,.07);
+  --cry1:rgba(255,255,255,.07);--cry2:rgba(255,255,255,.03);--cryb:rgba(255,255,255,.13);
+}
+[data-theme="light"]{
+  --bg:#f9f8f5;--bg2:#f0efe9;--bg3:#e8e6de;
+  --sf:rgba(0,0,0,.03);--sf2:rgba(0,0,0,.055);--sf3:rgba(0,0,0,.08);
+  --bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.16);
+  --tx:#1a1820;--tx2:#38364a;--mu:#78768c;--mu2:#aeacc0;
+  --gold:#9a6e00;--gold2:#7a5500;--g3:rgba(154,110,0,.10);
+  --teal:#0d9488;--rose:#e11d48;--vio:#7c3aed;--grn:#16a34a;
+  --glow:rgba(154,110,0,.05);
+  --cry1:rgba(255,255,255,.75);--cry2:rgba(255,255,255,.45);--cryb:rgba(0,0,0,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:16px;line-height:1.7;overflow-x:hidden;transition:background .4s var(--ease),color .4s var(--ease);}
+
+/* CURSOR */
+#cur{position:fixed;width:9px;height:9px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference;}
+#curR{position:fixed;width:34px;height:34px;border:1px solid rgba(233,201,110,.3);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+
+/* CANVAS */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 5vw;background:rgba(6,6,9,.6);backdrop-filter:blur(24px) saturate(160%);border-bottom:1px solid var(--bd);transition:padding .3s var(--ease),background .4s;}
+[data-theme="light"] nav{background:rgba(249,248,245,.75);}
+nav.sc{padding:.75rem 5vw;}
+.nlogo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:-.045em;color:var(--tx);text-decoration:none;display:flex;align-items:center;gap:5px;}
+.ndot{width:8px;height:8px;border-radius:50%;background:var(--gold);margin-bottom:8px;animation:pulse 2.5s ease infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(.65);opacity:.45;}}
+.nlinks{display:flex;gap:2rem;list-style:none;position:absolute;left:50%;transform:translateX(-50%);}
+.nlinks a{font-size:.78rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-decoration:none;transition:color .2s;}
+.nlinks a:hover{color:var(--tx);}
+.nright{display:flex;align-items:center;gap:.75rem;}
+.tbtn{width:36px;height:36px;border-radius:50%;background:var(--sf2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:background .3s,transform .25s;color:var(--tx);}
+.tbtn:hover{background:var(--sf3);transform:rotate(18deg);}
+.nhire{padding:.5rem 1.3rem;background:var(--gold);color:#0c0902;border-radius:40px;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-decoration:none;transition:transform .2s var(--spring),box-shadow .2s;}
+.nhire:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(233,201,110,.3);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:9rem 5vw 5rem;position:relative;z-index:1;}
+.hlayout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%;max-width:1200px;}
+.hbadge{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;border:1px solid rgba(233,201,110,.22);border-radius:40px;background:rgba(233,201,110,.06);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:1.75rem;animation:fsu .7s var(--ease) both;}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;}
+h1.hname{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(3.5rem,7.5vw,6.5rem);line-height:.93;letter-spacing:-.04em;margin-bottom:1.25rem;animation:fsu .7s .08s var(--ease) both;}
+.ns{display:block;color:var(--tx);}
+.no{display:block;-webkit-text-stroke:1.5px var(--gold);color:transparent;}
+.hrole{font-family:'JetBrains Mono',monospace;font-size:.95rem;color:var(--teal);margin-bottom:1.5rem;animation:fsu .7s .16s var(--ease) both;min-height:1.4em;}
+.hrole::before{content:'▸ ';}
+.tcur{display:inline-block;width:2px;height:.9em;background:var(--teal);vertical-align:middle;margin-left:1px;animation:bl .85s step-end infinite;}
+@keyframes bl{0%,100%{opacity:1;}50%{opacity:0;}}
+.hdesc{font-size:1.05rem;color:var(--mu);max-width:520px;line-height:1.8;margin-bottom:2.5rem;animation:fsu .7s .24s var(--ease) both;}
+.hdesc strong{color:var(--tx2);font-weight:600;}
+.hbtns{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:3.5rem;animation:fsu .7s .32s var(--ease) both;}
+.bpri{padding:.85rem 2rem;background:var(--gold);color:#0c0902;border-radius:40px;font-weight:700;font-size:.88rem;text-decoration:none;transition:transform .2s var(--spring),box-shadow .2s;}
+.bpri:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(233,201,110,.28);}
+.bsec{padding:.85rem 2rem;background:var(--sf);color:var(--tx);border:1px solid var(--bd2);border-radius:40px;font-weight:500;font-size:.88rem;text-decoration:none;transition:background .2s,border-color .2s;}
+.bsec:hover{background:var(--sf2);}
+.hstats{display:flex;gap:2.5rem;animation:fsu .7s .4s var(--ease) both;}
+.hstat{border-left:2px solid var(--bd2);padding-left:1.1rem;}
+.hsn{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:2rem;color:var(--tx);line-height:1;letter-spacing:-.03em;}
+.hsn span{color:var(--gold);}
+.hsl{font-size:.72rem;color:var(--mu);letter-spacing:.07em;text-transform:uppercase;margin-top:.2rem;}
+
+/* CRYSTAL CARD STACK */
+.hvisual{display:flex;justify-content:center;align-items:center;animation:fsu .9s .2s var(--ease) both;}
+.cstack{position:relative;width:300px;height:360px;}
+.ccard{position:absolute;border-radius:var(--r2);backdrop-filter:blur(20px) saturate(140%);background:linear-gradient(135deg,var(--cry1),var(--cry2));border:1px solid var(--cryb);transition:transform .4s var(--ease);}
+.cc1{width:270px;height:330px;top:20px;left:20px;background:linear-gradient(135deg,rgba(233,201,110,.09),rgba(79,209,197,.06));border-color:rgba(233,201,110,.18);transform:rotate(6deg);animation:f1 6s ease-in-out infinite;}
+.cc2{width:270px;height:330px;top:10px;left:10px;background:linear-gradient(135deg,rgba(167,139,250,.08),rgba(251,113,133,.05));border-color:rgba(167,139,250,.16);transform:rotate(-3deg);animation:f2 7s ease-in-out infinite;}
+.cc3{width:270px;height:330px;top:0;left:0;background:linear-gradient(135deg,var(--cry1),var(--cry2));border-color:var(--cryb);padding:1.75rem;display:flex;flex-direction:column;gap:.9rem;}
+@keyframes f1{0%,100%{transform:rotate(6deg) translateY(0);}50%{transform:rotate(6deg) translateY(-8px);}}
+@keyframes f2{0%,100%{transform:rotate(-3deg) translateY(0);}50%{transform:rotate(-3deg) translateY(-5px);}}
+.cav{width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--teal));display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.2rem;color:#0c0902;}
+.cnm{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:var(--tx);}
+.crl{font-size:.72rem;color:var(--mu);}
+.cdiv{height:1px;background:var(--bd);}
+.csr{display:flex;gap:.6rem;}
+.cs{flex:1;padding:.65rem;background:var(--sf);border:1px solid var(--bd);border-radius:9px;}
+.csn{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;color:var(--tx);line-height:1;}
+.csl{font-size:.6rem;color:var(--mu);margin-top:.2rem;}
+.cch{display:flex;gap:.35rem;flex-wrap:wrap;}
+.cchip{font-size:.62rem;padding:.18rem .5rem;border-radius:20px;background:var(--g3);border:1px solid rgba(233,201,110,.25);color:var(--gold);font-weight:600;}
+
+/* MARQUEE */
+.mwrap{overflow:hidden;background:var(--bg2);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:.85rem 0;position:relative;z-index:1;}
+.mtrack{display:flex;gap:2rem;animation:mq 30s linear infinite;width:max-content;}
+.mi{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--mu2);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:2rem;}
+.mi::after{content:'·';color:var(--gold);}
+@keyframes mq{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* SECTIONS */
+section{padding:7rem 5vw;position:relative;z-index:1;}
+.seye{display:flex;align-items:center;gap:1rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.75rem;}
+.seye::before{content:'';width:28px;height:1px;background:var(--gold);}
+h2.stitle{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2rem,4.5vw,3.2rem);letter-spacing:-.035em;line-height:1.05;margin-bottom:3rem;}
+h2.stitle em{font-style:normal;color:var(--gold);}
+
+/* PROJECTS */
+.pbg{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 50%,var(--bg) 100%);}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;}
+
+.pcard{border-radius:var(--r2);border:1px solid var(--bd);background:var(--sf);overflow:hidden;position:relative;transition:transform .35s var(--ease),border-color .3s,box-shadow .35s;}
+.pcard:hover{transform:translateY(-6px);border-color:var(--bd2);box-shadow:0 24px 60px rgba(0,0,0,.32);}
+[data-theme="light"] .pcard:hover{box-shadow:0 24px 60px rgba(0,0,0,.1);}
+.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1,var(--gold)),var(--c2,var(--teal)));opacity:0;transition:opacity .35s;}
+.pcard:hover::before{opacity:1;}
+.pcard::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent 60%);pointer-events:none;}
+.pcard.full{grid-column:1/-1;}
+
+.phdr{padding:1.6rem 1.6rem 1.1rem;display:flex;justify-content:space-between;align-items:flex-start;}
+.pico{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;border:1px solid var(--bd2);position:relative;overflow:hidden;}
+.pico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);}
+.pbags{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end;}
+.pbag{font-size:.62rem;font-weight:700;padding:.22rem .6rem;border-radius:20px;letter-spacing:.05em;}
+.bag-s{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25);color:var(--rose);}
+.bag-a{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--vio);}
+.bag-p{background:rgba(233,201,110,.1);border:1px solid rgba(233,201,110,.25);color:var(--gold);}
+.bag-m{background:rgba(79,209,197,.1);border:1px solid rgba(79,209,197,.25);color:var(--teal);}
+
+.pbody{padding:0 1.6rem 1.4rem;}
+.pbody2{display:grid;grid-template-columns:1.1fr 1fr;gap:1.75rem;align-items:start;}
+.pname{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.15rem;color:var(--tx);margin-bottom:.45rem;line-height:1.2;}
+.pdesc{font-size:.86rem;color:var(--mu);line-height:1.65;margin-bottom:1.1rem;}
+.pfeats{display:flex;flex-direction:column;gap:.38rem;margin-bottom:1.25rem;}
+.pfeat{display:flex;align-items:center;gap:.55rem;font-size:.79rem;color:var(--tx2);}
+.pfeat::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.pstack{display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.ptag{font-size:.7rem;padding:.23rem .62rem;border-radius:20px;background:var(--sf2);border:1px solid var(--bd);color:var(--mu);font-weight:500;transition:background .2s;}
+.pcard:hover .ptag{background:var(--sf3);}
+
+.pfoot{padding:1.15rem 1.6rem;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.plink{display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:.03em;transition:gap .2s var(--spring);}
+.plink:hover{gap:.8rem;}
+.plink svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;}
+.pgit{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--mu);text-decoration:none;padding:.3rem .8rem;border:1px solid var(--bd);border-radius:20px;background:var(--sf);transition:color .2s,border-color .2s;}
+.pgit:hover{color:var(--tx);border-color:var(--bd2);}
+.pgit svg{width:13px;height:13px;fill:currentColor;}
+
+/* CODE BLOCK */
+.codeblk{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:1.15rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--mu);line-height:1.85;}
+/* PIPELINE */
+.pipeline{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:1.15rem;}
+.pip-step{display:flex;align-items:center;gap:.55rem;font-size:.78rem;color:var(--tx2);}
+.pip-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pip-conn{width:1px;height:12px;background:var(--bd);margin-left:3.5px;}
+/* SKILL BOX */
+.sklbx{margin-top:.85rem;padding:.9rem;border-radius:10px;}
+
+/* ABOUT */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.atext p{color:var(--mu);margin-bottom:1.2rem;font-size:1.02rem;}
+.atext p strong{color:var(--tx2);font-weight:600;}
+.avpill{display:inline-flex;align-items:center;gap:.5rem;padding:.38rem 1rem;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.22);border-radius:40px;font-size:.76rem;font-weight:600;color:var(--grn);margin-top:1.5rem;}
+.avpill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--grn);animation:pulse 2s infinite;}
+.acard{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r2);overflow:hidden;}
+.acardh{padding:1.35rem 1.5rem;background:linear-gradient(135deg,var(--g3),rgba(79,209,197,.05));border-bottom:1px solid var(--bd);}
+.acardht{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.88rem;color:var(--tx);}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:.82rem 1.5rem;border-bottom:1px solid var(--bd);transition:background .2s;}
+.irow:last-child{border-bottom:none;}
+.irow:hover{background:var(--sf2);}
+.ik{font-size:.7rem;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;font-weight:500;}
+.iv{font-size:.84rem;color:var(--tx2);font-weight:500;}
+
+/* SKILLS */
+.skbg{background:var(--bg2);}
+.skgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;}
+.skcard{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.55rem;transition:transform .3s var(--ease),border-color .3s,background .3s;position:relative;overflow:hidden;}
+.skcard::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none;}
+.skcard:hover{transform:translateY(-4px);border-color:var(--bd2);background:var(--sf2);}
+.skhdr{display:flex;align-items:center;gap:.85rem;margin-bottom:.95rem;}
+.skico{width:38px;height:38px;border-radius:10px;background:var(--g3);border:1px solid rgba(233,201,110,.2);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.sktitle{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.93rem;color:var(--tx);}
+.chips{display:flex;flex-wrap:wrap;gap:.32rem;}
+.chip{font-size:.7rem;padding:.22rem .62rem;border-radius:20px;font-weight:500;}
+.cg{background:var(--g3);border:1px solid rgba(233,201,110,.25);color:var(--gold);}
+.ct{background:rgba(79,209,197,.08);border:1px solid rgba(79,209,197,.2);color:var(--teal);}
+.cb{background:rgba(109,164,232,.08);border:1px solid rgba(109,164,232,.2);color:#6da4e8;}
+.cm{background:rgba(255,255,255,.05);border:1px solid var(--bd);color:var(--mu);}
+.cv{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);color:var(--vio);}
+.profwrap{margin-top:3.5rem;}
+.profcols{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem 5rem;}
+.profitem{margin-bottom:1.4rem;}
+.proftop{display:flex;justify-content:space-between;margin-bottom:.5rem;}
+.profnm{font-size:.83rem;font-weight:500;color:var(--tx2);}
+.profpct{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);}
+.proftrk{height:3px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+[data-theme="light"] .proftrk{background:rgba(0,0,0,.08);}
+.proffill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--teal));width:0%;transition:width 1.4s cubic-bezier(.4,0,.2,1);}
+
+/* EXP */
+.exgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.excard{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.7rem;position:relative;overflow:hidden;transition:transform .3s var(--ease),border-color .3s;}
+.excard:hover{transform:translateY(-3px);border-color:var(--bd2);}
+.excard.cur{border-color:rgba(233,201,110,.22);background:linear-gradient(135deg,rgba(233,201,110,.04),var(--sf));}
+.ecurpill{position:absolute;top:1.2rem;right:1.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:500;letter-spacing:.1em;color:var(--gold);padding:.2rem .6rem;border:1px solid rgba(233,201,110,.3);border-radius:20px;background:rgba(233,201,110,.07);}
+.eperiod{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--mu2);letter-spacing:.05em;margin-bottom:.55rem;}
+.erole{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;color:var(--tx);margin-bottom:.2rem;}
+.eorg{font-size:.82rem;font-weight:600;color:var(--gold);margin-bottom:.95rem;}
+.epts{list-style:none;padding:0;}
+.epts li{font-size:.81rem;color:var(--mu);padding-left:1rem;position:relative;margin-bottom:.38rem;line-height:1.6;}
+.epts li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:.72rem;}
+
+/* EDU */
+.edugrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem;}
+.educard{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.7rem;position:relative;overflow:hidden;transition:transform .3s var(--ease),border-color .3s;}
+.educard:hover{transform:translateY(-3px);border-color:var(--bd2);}
+.educard.pri{border-color:rgba(233,201,110,.2);}
+.edubig{position:absolute;top:.5rem;right:1rem;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:4rem;color:rgba(233,201,110,.06);line-height:1;letter-spacing:-.04em;pointer-events:none;}
+.edubyr{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--gold);letter-spacing:.08em;margin-bottom:.85rem;padding:.26rem .7rem;background:var(--g3);border:1px solid rgba(233,201,110,.2);border-radius:20px;display:inline-block;}
+.edudeg{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:.96rem;color:var(--tx);margin-bottom:.32rem;line-height:1.3;}
+.edusch{font-size:.8rem;color:var(--mu);}
+
+/* CERTS */
+.cbg{background:var(--bg2);}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:.9rem;}
+.ccrd{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.1rem;display:flex;align-items:center;gap:.85rem;transition:border-color .3s,transform .25s var(--ease),background .3s;}
+.ccrd:hover{border-color:var(--bd2);transform:translateX(4px);background:var(--sf2);}
+.cico{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:var(--g3);border:1px solid rgba(233,201,110,.2);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+.cnm{font-size:.82rem;font-weight:500;color:var(--tx);line-height:1.3;}
+.cby{font-size:.7rem;color:var(--mu);margin-top:.1rem;}
+
+/* CONTACT */
+.ctcenter{max-width:760px;margin:0 auto;text-align:center;}
+.ctcenter .seye{justify-content:center;}
+.ctsub{font-size:1rem;color:var(--mu);max-width:440px;margin:0 auto 3rem;}
+.ctgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;text-align:left;}
+.citem{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.25rem;display:flex;align-items:center;gap:.85rem;text-decoration:none;transition:border-color .3s,transform .25s var(--ease),background .3s;}
+.citem:hover{border-color:var(--bd2);transform:translateY(-2px);background:var(--sf2);}
+.citem.hl{background:var(--gold);border-color:transparent;grid-column:1/-1;border-radius:var(--r2);padding:1.55rem;justify-content:center;}
+.citem.hl:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(233,201,110,.22);}
+.cic{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.citem.hl .cic{background:rgba(12,9,2,.12);}
+.clbl{font-size:.85rem;font-weight:600;color:var(--tx);}
+.citem.hl .clbl{color:#0c0902;font-size:.96rem;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;}
+.csub2{font-size:.7rem;color:var(--mu);margin-top:.1rem;}
+.citem.hl .csub2{color:rgba(12,9,2,.5);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--bd);padding:1.7rem 5vw;display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--mu);position:relative;z-index:1;}
+.fbrand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-.03em;color:var(--tx);}
+.fbrand span{color:var(--gold);}
+
+/* UTILS */
+.divider{width:100%;height:1px;background:var(--bd);position:relative;z-index:1;}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
+.rv.in{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+@keyframes fsu{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:rgba(233,201,110,.35);border-radius:2px;}
+
+@media(max-width:1024px){.hlayout,.agrid{grid-template-columns:1fr;}.hvisual{display:none;}}
+@media(max-width:768px){nav{padding:1rem 1.5rem;}.nlinks{display:none;}section{padding:5rem 1.5rem;}.exgrid,.edugrid,.ctgrid,.pgrid{grid-template-columns:1fr;}.pcard.full{grid-column:auto;}.pbody2{grid-template-columns:1fr;}footer{flex-direction:column;gap:.5rem;text-align:center;}.profcols{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="curR"></div>
+<canvas id="bgc"></canvas>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nlogo"><span class="ndot"></span>Debanga.</a>
+  <ul class="nlinks">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nright">
+    <button class="tbtn" id="tbtn" title="Toggle theme">🌙</button>
+    <a href="mailto:debanga078@gmail.com" class="nhire">Hire Me ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hlayout">
+    <div>
+      <div class="hbadge"><span class="bdot"></span>Open to Internships &amp; Placements</div>
+      <h1 class="hname"><span class="ns">Debanga</span><span class="no">Guria</span></h1>
+      <div class="hrole"><span id="tw"></span><span class="tcur"></span></div>
+      <p class="hdesc">B.Tech CSE student specializing in <strong>Artificial Intelligence &amp; Machine Learning</strong> at Brainware University. Building intelligent systems, securing digital infrastructure, and turning ideas into real working software.</p>
+      <div class="hbtns">
+        <a href="#projects" class="bpri">View Projects ↓</a>
+        <a href="#contact" class="bsec">Get In Touch</a>
+      </div>
+      <div class="hstats">
+        <div class="hstat"><div class="hsn">4<span>+</span></div><div class="hsl">Projects</div></div>
+        <div class="hstat"><div class="hsn">4<span>+</span></div><div class="hsl">Internships</div></div>
+        <div class="hstat"><div class="hsn">7<span>+</span></div><div class="hsl">Certs</div></div>
+        <div class="hstat"><div class="hsn">2028</div><div class="hsl">Graduating</div></div>
+      </div>
+    </div>
+    <div class="hvisual">
+      <div class="cstack">
+        <div class="ccard cc1"></div>
+        <div class="ccard cc2"></div>
+        <div class="ccard cc3">
+          <div class="cav">DG</div>
+          <div><div class="cnm">Debanga Guria</div><div class="crl">AI/ML Developer · CSE Student</div></div>
+          <div class="cdiv"></div>
+          <div class="csr">
+            <div class="cs"><div class="csn">4+</div><div class="csl">Internships</div></div>
+            <div class="cs"><div class="csn">7+</div><div class="csl">Certs</div></div>
+            <div class="cs"><div class="csn">4</div><div class="csl">Projects</div></div>
+          </div>
+          <div class="cch">
+            <span class="cchip">Python</span><span class="cchip">ML</span><span class="cchip">Security</span><span class="cchip">C++</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mwrap">
+  <div class="mtrack"><span class="mi">Python</span><span class="mi">Machine Learning</span><span class="mi">C++</span><span class="mi">Cybersecurity</span><span class="mi">AI Development</span><span class="mi">Computer Vision</span><span class="mi">Data Structures</span><span class="mi">NLP</span><span class="mi">Steganography</span><span class="mi">Cryptography</span><span class="mi">Angular</span><span class="mi">Ethical Hacking</span><span class="mi">Blender 3D</span><span class="mi">Java</span><span class="mi">Git</span><span class="mi">Python</span><span class="mi">Machine Learning</span><span class="mi">C++</span><span class="mi">Cybersecurity</span><span class="mi">AI Development</span><span class="mi">Computer Vision</span><span class="mi">Data Structures</span><span class="mi">NLP</span><span class="mi">Steganography</span><span class="mi">Cryptography</span><span class="mi">Angular</span><span class="mi">Ethical Hacking</span><span class="mi">Blender 3D</span><span class="mi">Java</span><span class="mi">Git</span></div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects" class="pbg">
+  <div class="seye rv">Featured Projects</div>
+  <h2 class="stitle rv d1">What I've <em>shipped.</em></h2>
+  <div class="pgrid">
+
+    <!-- CIPHERNEST -->
+    <div class="pcard full rv" style="--c1:#fb7185;--c2:#a78bfa;">
+      <div class="phdr">
+        <div class="pico" style="background:linear-gradient(135deg,rgba(251,113,133,.15),rgba(167,139,250,.12));">🔐</div>
+        <div class="pbags"><span class="pbag bag-s">Security</span><span class="pbag bag-p">Python</span><span class="pbag bag-a">Cryptography</span></div>
+      </div>
+      <div class="pbody">
+        <div class="pbody2">
+          <div>
+            <div class="pname">CipherNest</div>
+            <p class="pdesc">A secure text-hiding tool that combines <strong>steganography and cryptographic techniques</strong> to conceal sensitive information inside carrier files. Built to demonstrate real-world data security and privacy engineering with practical encryption pipeline design.</p>
+            <div class="pfeats">
+              <div class="pfeat">Steganography-based message concealment in carrier files</div>
+              <div class="pfeat">Cryptographic encryption layer for double-protection</div>
+              <div class="pfeat">Clean Python implementation with modular architecture</div>
+              <div class="pfeat">Demonstrates applied security principles from Cisco certification</div>
+            </div>
+            <div class="pstack"><span class="ptag">Python</span><span class="ptag">Cryptography</span><span class="ptag">Steganography</span><span class="ptag">Data Security</span></div>
+          </div>
+          <div>
+            <div class="codeblk">
+              <div style="color:var(--rose);margin-bottom:.4rem;"># CipherNest — Core Logic</div>
+              <div style="color:var(--mu2);">def <span style="color:var(--teal)">hide_message</span>(</div>
+              <div style="padding-left:1rem;color:var(--vio);">carrier, secret, key</div>
+              <div style="color:var(--mu2);">):</div>
+              <div style="padding-left:1rem;color:var(--mu2);">encrypted = <span style="color:var(--teal)">cipher</span>(</div>
+              <div style="padding-left:2rem;color:var(--gold);">secret, key</div>
+              <div style="padding-left:1rem;color:var(--mu2);">)</div>
+              <div style="padding-left:1rem;color:var(--mu2);">return <span style="color:var(--teal)">embed</span>(</div>
+              <div style="padding-left:2rem;color:var(--gold);">carrier, encrypted</div>
+              <div style="padding-left:1rem;color:var(--mu2);">)</div>
+            </div>
+            <div class="sklbx" style="background:rgba(251,113,133,.06);border:1px solid rgba(251,113,133,.15);margin-top:.85rem;">
+              <div style="font-size:.68rem;color:var(--rose);font-weight:700;margin-bottom:.35rem;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;">SKILLS DEMONSTRATED</div>
+              <div style="font-size:.76rem;color:var(--mu);line-height:1.7;">Applied cryptography · Cybersecurity principles · Python OOP · Secure data handling</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pfoot">
+        <a href="https://github.com/Debanga-06/CipherNest" target="_blank" class="plink">View on GitHub <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="https://github.com/Debanga-06/CipherNest" target="_blank" class="pgit"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .269.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg> GitHub</a>
+      </div>
+    </div>
+
+    <!-- CIRCULOMETRIX AI -->
+    <div class="pcard full rv d1" style="--c1:#4fd1c5;--c2:#a78bfa;">
+      <div class="phdr">
+        <div class="pico" style="background:linear-gradient(135deg,rgba(79,209,197,.15),rgba(167,139,250,.12));">🤖</div>
+        <div class="pbags"><span class="pbag bag-a">AI</span><span class="pbag bag-m">ML</span><span class="pbag bag-p">Python</span></div>
+      </div>
+      <div class="pbody">
+        <div class="pbody2">
+          <div>
+            <div class="pname">CirculoMetrix AI</div>
+            <p class="pdesc">An <strong>AI-powered metrics and analytics platform</strong> applying machine learning to analyze, visualize, and derive actionable insights from complex data patterns. Demonstrates a complete end-to-end ML pipeline from data ingestion to intelligent output — the kind of system real companies use.</p>
+            <div class="pfeats">
+              <div class="pfeat">AI-driven pattern recognition and data classification</div>
+              <div class="pfeat">Automated metrics computation with visual output</div>
+              <div class="pfeat">Complete ML pipeline: ingest → train → predict → insight</div>
+              <div class="pfeat">Applied data science fundamentals with Python</div>
+            </div>
+            <div class="pstack"><span class="ptag">Python</span><span class="ptag">Machine Learning</span><span class="ptag">Data Analysis</span><span class="ptag">AI/ML</span><span class="ptag">Visualization</span></div>
+          </div>
+          <div>
+            <div class="pipeline">
+              <div style="font-size:.68rem;font-family:'JetBrains Mono',monospace;color:var(--mu2);letter-spacing:.08em;margin-bottom:.75rem;text-transform:uppercase;">ML Pipeline</div>
+              <div class="pip-step"><div class="pip-dot" style="background:var(--teal);"></div><span>Data Ingestion</span></div>
+              <div class="pip-conn"></div>
+              <div class="pip-step"><div class="pip-dot" style="background:var(--vio);"></div><span>Feature Engineering</span></div>
+              <div class="pip-conn"></div>
+              <div class="pip-step"><div class="pip-dot" style="background:var(--gold);"></div><span>Model Training</span></div>
+              <div class="pip-conn"></div>
+              <div class="pip-step"><div class="pip-dot" style="background:var(--rose);"></div><span>Prediction &amp; Insights</span></div>
+            </div>
+            <div class="sklbx" style="background:rgba(79,209,197,.06);border:1px solid rgba(79,209,197,.15);margin-top:.85rem;">
+              <div style="font-size:.68rem;color:var(--teal);font-weight:700;margin-bottom:.35rem;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;">SKILLS DEMONSTRATED</div>
+              <div style="font-size:.76rem;color:var(--mu);line-height:1.7;">ML pipeline design · Data analysis · AI model integration · Pattern recognition</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pfoot">
+        <a href="https://github.com/Debanga-06/CirculoMetrix-AI" target="_blank" class="plink">View on GitHub <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="https://github.com/Debanga-06/CirculoMetrix-AI" target="_blank" class="pgit"><svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .269.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg> GitHub</a>
+      </div>
+    </div>
+
+    <!-- IBM CHATBOT -->
+    <div class="pcard rv d2" style="--c1:#e9c96e;--c2:#4fd1c5;">
+      <div class="phdr">
+        <div class="pico" style="background:linear-gradient(135deg,rgba(233,201,110,.15),rgba(79,209,197,.1));">🧠</div>
+        <div class="pbags"><span class="pbag bag-a">AI</span></div>
+      </div>
+      <div class="pbody">
+        <div class="pname">IBM AI Chatbot</div>
+        <p class="pdesc">Built during IBM Technovate Workshop — a functional AI chatbot using IBM's tools alongside an image labeling pipeline, demonstrating real-world AI model deployment.</p>
+        <div class="pstack"><span class="ptag">Python</span><span class="ptag">IBM AI</span><span class="ptag">NLP</span><span class="ptag">Image Labeling</span></div>
+      </div>
+      <div class="pfoot">
+        <span style="font-size:.75rem;color:var(--mu);font-family:'JetBrains Mono',monospace;">IBM Technovate · Mar 2025</span>
+        <span style="font-size:.68rem;padding:.22rem .7rem;background:var(--g3);border:1px solid rgba(233,201,110,.22);border-radius:20px;color:var(--gold);font-weight:700;">Workshop</span>
+      </div>
+    </div>
+
+    <!-- QUIZ GAME -->
+    <div class="pcard rv d3" style="--c1:#a78bfa;--c2:#fb7185;">
+      <div class="phdr">
+        <div class="pico" style="background:linear-gradient(135deg,rgba(167,139,250,.15),rgba(251,113,133,.1));">🎯</div>
+        <div class="pbags"><span class="pbag bag-p">Python</span></div>
+      </div>
+      <div class="pbody">
+        <div class="pname">Python Quiz Game</div>
+        <p class="pdesc">Capstone project from Upskill Campus internship. Full CLI quiz application applying Python fundamentals — data structures, file I/O, exception handling, and control flow.</p>
+        <div class="pstack"><span class="ptag">Python</span><span class="ptag">CLI</span><span class="ptag">Data Structures</span><span class="ptag">File I/O</span></div>
+      </div>
+      <div class="pfoot">
+        <span style="font-size:.75rem;color:var(--mu);font-family:'JetBrains Mono',monospace;">Upskill Campus · Apr 2025</span>
+        <span style="font-size:.68rem;padding:.22rem .7rem;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.22);border-radius:20px;color:var(--vio);font-weight:700;">Internship</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="agrid">
+    <div>
+      <div class="seye rv">About Me</div>
+      <h2 class="stitle rv d1">Driven by AI.<br>Built on <em>fundamentals.</em></h2>
+      <div class="atext rv d2">
+        <p>I'm a <strong>B.Tech Computer Science</strong> student at Brainware University, Barasat, specializing in AI &amp; ML. I don't just study AI — I build with it.</p>
+        <p>With active internships in cybersecurity, Python, C++, and hands-on IBM AI experience, I bridge theory and practice in ways that show up directly in code and real projects.</p>
+        <p>Currently pursuing deep interests in <strong>Computer Vision</strong>, <strong>NLP</strong>, ethical hacking, and full-stack development — building the versatility that makes engineers indispensable to teams.</p>
+      </div>
+      <div class="avpill rv d3">Available for Internships &amp; Placements</div>
+    </div>
+    <div class="acard rv d2">
+      <div class="acardh"><div class="acardht">Profile at a Glance</div></div>
+      <div class="irow"><span class="ik">Location</span><span class="iv">Hingalganj, West Bengal</span></div>
+      <div class="irow"><span class="ik">Degree</span><span class="iv">B.Tech CSE (AI-ML)</span></div>
+      <div class="irow"><span class="ik">University</span><span class="iv">Brainware University</span></div>
+      <div class="irow"><span class="ik">Phone</span><span class="iv">+91 7601993103</span></div>
+      <div class="irow"><span class="ik">Email</span><span class="iv" style="color:var(--gold);">debanga078@gmail.com</span></div>
+      <div class="irow"><span class="ik">Languages</span><span class="iv">Bengali · Hindi · English</span></div>
+      <div class="irow"><span class="ik">Interests</span><span class="iv">Photography · Travel · Music</span></div>
+      <div class="irow"><span class="ik">GitHub</span><span class="iv" style="color:var(--vio);">Debanga-06</span></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills" class="skbg">
+  <div class="seye rv">Technical Skills</div>
+  <h2 class="stitle rv d1">What I <em>build</em> with.</h2>
+  <div class="skgrid">
+    <div class="skcard rv d1"><div class="skhdr"><div class="skico">⚙️</div><div class="sktitle">Programming</div></div><div class="chips"><span class="chip cg">Python</span><span class="chip cg">C</span><span class="chip cg">C++</span><span class="chip cg">Java</span></div></div>
+    <div class="skcard rv d2"><div class="skhdr"><div class="skico">🧠</div><div class="sktitle">AI / ML</div></div><div class="chips"><span class="chip ct">Machine Learning</span><span class="chip ct">Computer Vision</span><span class="chip ct">NLP</span><span class="chip ct">AI Chatbots</span></div></div>
+    <div class="skcard rv d3"><div class="skhdr"><div class="skico">🔐</div><div class="sktitle">Cybersecurity</div></div><div class="chips"><span class="chip cb">Ethical Hacking</span><span class="chip cb">Threat Analysis</span><span class="chip cb">Cryptography</span></div></div>
+    <div class="skcard rv d1"><div class="skhdr"><div class="skico">🌐</div><div class="sktitle">Web & Frontend</div></div><div class="chips"><span class="chip cg">HTML5</span><span class="chip cg">CSS3</span><span class="chip cg">Angular</span></div></div>
+    <div class="skcard rv d2"><div class="skhdr"><div class="skico">🛠️</div><div class="sktitle">Tools</div></div><div class="chips"><span class="chip cm">Git</span><span class="chip cm">GitHub</span><span class="chip cm">Blender 3D</span><span class="chip cm">IoT</span><span class="chip cm">DSA</span></div></div>
+    <div class="skcard rv d3"><div class="skhdr"><div class="skico">🎯</div><div class="sktitle">Soft Skills</div></div><div class="chips"><span class="chip cv">Leadership</span><span class="chip cv">Critical Thinking</span><span class="chip cv">Collaboration</span><span class="chip cv">Communication</span></div></div>
+  </div>
+  <div class="profwrap rv">
+    <div class="seye" style="margin-top:3.5rem;margin-bottom:.65rem;">Proficiency</div>
+    <h2 class="stitle" style="font-size:1.6rem;margin-bottom:2rem;">Skill <em>levels.</em></h2>
+    <div class="profcols">
+      <div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Python</span><span class="profpct">85%</span></div><div class="proftrk"><div class="proffill" data-pct="85"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">C / C++</span><span class="profpct">78%</span></div><div class="proftrk"><div class="proffill" data-pct="78"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Machine Learning</span><span class="profpct">70%</span></div><div class="proftrk"><div class="proffill" data-pct="70"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Data Structures &amp; Algorithms</span><span class="profpct">72%</span></div><div class="proftrk"><div class="proffill" data-pct="72"></div></div></div>
+      </div>
+      <div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Cybersecurity</span><span class="profpct">68%</span></div><div class="proftrk"><div class="proffill" data-pct="68"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">HTML / CSS / Angular</span><span class="profpct">75%</span></div><div class="proftrk"><div class="proffill" data-pct="75"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Git &amp; Version Control</span><span class="profpct">80%</span></div><div class="proftrk"><div class="proffill" data-pct="80"></div></div></div>
+        <div class="profitem"><div class="proftop"><span class="profnm">Blender 3D</span><span class="profpct">60%</span></div><div class="proftrk"><div class="proffill" data-pct="60"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="seye rv">Experience</div>
+  <h2 class="stitle rv d1">Where I've <em>worked.</em></h2>
+  <div class="exgrid">
+    <div class="excard cur rv"><div class="ecurpill">CURRENT</div><div class="eperiod">MAY 2025 — PRESENT</div><div class="erole">CyberSecurity Intern</div><div class="eorg">Edunet Foundation · AICTE</div><ul class="epts"><li>Learning cyber threat identification, vulnerability assessment, and security process design.</li><li>Hands-on AICTE-certified curriculum projects applying core security fundamentals.</li><li>Developing skills in threat modeling and incident response procedures.</li></ul></div>
+    <div class="excard rv d1"><div class="eperiod">MAY 2025 — JUN 2025</div><div class="erole">C++ Programming Intern</div><div class="eorg">CODSOFT</div><ul class="epts"><li>Built multiple projects covering OOP, memory management, and algorithms in C++.</li><li>Strengthened understanding of core language features through iterative project work.</li></ul></div>
+    <div class="excard rv d2"><div class="eperiod">MAR 2025 — APR 2025</div><div class="erole">Python Intern</div><div class="eorg">Upskill Campus</div><ul class="epts"><li>Completed structured Python training with a capstone "Quiz Game" project.</li><li>Applied file handling, data structures, and control flow to build a functional CLI app.</li></ul></div>
+    <div class="excard rv d3"><div class="eperiod">MAR 2025</div><div class="erole">AI Workshop Participant</div><div class="eorg">IBM Technovate</div><ul class="epts"><li>Trained on real-world AI models including image labeling pipelines.</li><li>Built and demonstrated a working AI chatbot using IBM's technology stack.</li></ul></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="seye rv">Education</div>
+  <h2 class="stitle rv d1">Academic <em>background.</em></h2>
+  <div class="edugrid">
+    <div class="educard pri rv"><div class="edubig">01</div><div class="edubyr">2022 → 2028</div><div class="edudeg">B.Tech in CSE — Artificial Intelligence &amp; Machine Learning</div><div class="edusch">Brainware University, Barasat, West Bengal</div></div>
+    <div class="educard rv d1"><div class="edubig">02</div><div class="edubyr">2022 – 2024</div><div class="edudeg">Higher Secondary Education (Class XII)</div><div class="edusch">Hingalganj High School (H.S), Hingalganj</div></div>
+    <div class="educard rv d2"><div class="edubig">03</div><div class="edubyr">2017 – 2022</div><div class="edudeg">Secondary Education (Class X)</div><div class="edusch">Mamudpur M.J.S Pratisthan (H.S), Mamudpur</div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- CERTIFICATIONS -->
+<section class="cbg">
+  <div class="seye rv">Certifications</div>
+  <h2 class="stitle rv d1">Verified <em>credentials.</em></h2>
+  <div class="cgrid">
+    <div class="ccrd rv"><div class="cico">🔐</div><div><div class="cnm">Ethical Hacker</div><div class="cby">Cisco</div></div></div>
+    <div class="ccrd rv d1"><div class="cico">💻</div><div><div class="cnm">Operating System</div><div class="cby">Saylor Academy</div></div></div>
+    <div class="ccrd rv d2"><div class="cico">🛡️</div><div><div class="cnm">Cybersecurity Analyst Simulation</div><div class="cby">Forage</div></div></div>
+    <div class="ccrd rv d3"><div class="cico">🅰️</div><div><div class="cnm">Angular Framework</div><div class="cby">Infosys</div></div></div>
+    <div class="ccrd rv"><div class="cico">🌐</div><div><div class="cnm">HTML &amp; CSS Bootcamp</div><div class="cby">LetsUpgrade</div></div></div>
+    <div class="ccrd rv d1"><div class="cico">🤖</div><div><div class="cnm">Machine Learning</div><div class="cby">Simplilearn</div></div></div>
+    <div class="ccrd rv d2"><div class="cico">🧰</div><div><div class="cnm">AI Tools Workshop</div><div class="cby">Be10x</div></div></div>
+    <div class="ccrd rv d3"><div class="cico">📦</div><div><div class="cnm">Git &amp; GitHub</div><div class="cby">Version Control</div></div></div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="ctcenter">
+    <div class="seye rv">Contact</div>
+    <h2 class="stitle rv d1">Let's build something <em>together.</em></h2>
+    <p class="ctsub rv d2">Actively seeking internships and placement opportunities in AI/ML, cybersecurity, and software development. Let's connect.</p>
+    <div class="ctgrid rv d3">
+      <a href="mailto:debanga078@gmail.com" class="citem hl"><div class="cic">✉</div><div><div class="clbl">debanga078@gmail.com</div><div class="csub2">Preferred — reply within 24 hours</div></div></a>
+      <a href="https://www.linkedin.com/in/debanga-guria" target="_blank" class="citem"><div class="cic" style="background:rgba(10,102,194,.15);">in</div><div><div class="clbl" style="color:var(--tx)">LinkedIn</div><div class="csub2">debanga-guria</div></div></a>
+      <a href="https://github.com/Debanga-06" target="_blank" class="citem"><div class="cic"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--tx)"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .269.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></div><div><div class="clbl" style="color:var(--tx)">GitHub</div><div class="csub2">Debanga-06</div></div></a>
+      <a href="tel:+917601993103" class="citem"><div class="cic">📞</div><div><div class="clbl" style="color:var(--tx)">+91 7601993103</div><div class="csub2">Available 10am – 8pm IST</div></div></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">Debanga<span>.</span></div>
+  <div>B.Tech CSE (AI-ML) · Brainware University · West Bengal, India</div>
+  <div>© 2025 Debanga Guria</div>
+</footer>
+
+<script>
+/* CURSOR */
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='15px';cur.style.height='15px';curR.style.width='50px';curR.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='9px';cur.style.height='9px';curR.style.width='34px';curR.style.height='34px';});
+});
+
+/* PARTICLES */
+const cv=document.getElementById('bgc'),ctx=cv.getContext('2d');
+let W,H,pts=[];
+const resize=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};
+resize();addEventListener('resize',resize);
+function Pt(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.22;this.vy=(Math.random()-.5)*.22;this.r=Math.random()*1.2+.3;this.a=Math.random()*.3+.05;}
+Pt.prototype.tick=function(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H){this.x=Math.random()*W;this.y=Math.random()*H;}};
+for(let i=0;i<75;i++)pts.push(new Pt());
+const dark=()=>document.documentElement.getAttribute('data-theme')==='dark';
+(function draw(){
+  ctx.clearRect(0,0,W,H);
+  const gc=dark()?'233,201,110':'154,110,0';
+  pts.forEach(p=>{
+    p.tick();
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${gc},${p.a})`;ctx.fill();
+  });
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<100){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(${gc},${(dark()?.032:.018)*(1-d/100)})`;ctx.lineWidth=.5;ctx.stroke();}
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* TYPEWRITER */
+const roles=['AI/ML Developer','Python Engineer','Cybersecurity Intern','B.Tech CSE Student','Project Builder','Problem Solver'];
+let ri=0,ci=0,del=false;const tw=document.getElementById('tw');
+(function type(){
+  const s=roles[ri];
+  if(!del){tw.textContent=s.slice(0,++ci);if(ci===s.length){del=true;setTimeout(type,1900);return;}}
+  else{tw.textContent=s.slice(0,--ci);if(ci===0){del=false;ri=(ri+1)%roles.length;}}
+  setTimeout(type,del?46:86);
+})();
+
+/* THEME */
+const html=document.documentElement,tbtn=document.getElementById('tbtn');
+const setTheme=t=>{html.setAttribute('data-theme',t);tbtn.textContent=t==='dark'?'🌙':'☀️';localStorage.setItem('t',t);};
+setTheme(localStorage.getItem('t')||'dark');
+tbtn.addEventListener('click',()=>setTheme(html.getAttribute('data-theme')==='dark'?'light':'dark'));
+
+/* NAV SCROLL */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('sc',scrollY>60));
+
+/* REVEAL */
+const ro=new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+/* SKILL BARS */
+const bo=new IntersectionObserver(en=>en.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.proffill').forEach(b=>b.style.width=b.dataset.pct+'%');bo.unobserve(e.target);}}),{threshold:.2});
+const pc=document.querySelector('.profcols');if(pc)bo.observe(pc);
+</script>
+</body>
+</html>
